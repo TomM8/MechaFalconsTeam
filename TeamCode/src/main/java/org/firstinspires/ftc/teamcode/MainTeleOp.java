@@ -250,8 +250,8 @@ public class MainTeleOp extends OpMode {
         telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);*/
 
         if(gamepad1.right_bumper){
-            blockGrabber.setPosition(0.35);
-            blockGrabber2.setPosition(0.75);
+            blockGrabber.setPosition(0.40);
+            blockGrabber2.setPosition(0.70);
         }
         else {
             blockGrabber.setPosition(0.72);
