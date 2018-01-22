@@ -32,14 +32,17 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import java.util.*;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.sun.tools.javac.comp.Todo;
 
 /**
@@ -72,28 +75,26 @@ public class MainTeleOp extends OpMode {
     static final double MOTOR_HALF_POWER = 0.5;
     static final double MOTOR_LEAST_POWER = 0.3;
     static final double MOTOR_POWER_OFF = 0.0;
-    static final double BLOCK_GRABBER_MAX = 1.0;
+    static final double SERVO_MAX = 1.0;
+    static final double SERVO_MID = 0.5;
     static final double INCREMENT_SPEED = 0.02;
     double blockGrabberPosition = 0.42;
     double blockGrabberPosition2 = 0.59;
 
-    HardwareMap hwMap = null;
+//    HardwareMap hwMap = null;
 
     // Defining your motors - DcMotor is a class provided by the FTC SDK (software dev kit)
-    //DcMotor motorOne;
-    //DcMotor motorTwo;
-    //DcMotor motorThree;
-//    DcMotor motorFour;
-    DcMotorSimple liftMotor;
+    DcMotor liftMotor;
     DcMotor driveWheel;
     DcMotor driveWheel2;
     Servo blockGrabber;
     Servo blockGrabber2;
+    Servo ballSensorServo;
 
 
     // Similarly, if you wanted to define a servo, you would put:
     // Servo servoName;
-    // The servoName can be anything you want, it's a variable
+    // The servoName can be anything you want, it's a object.
 
 
     /*
@@ -110,19 +111,12 @@ public class MainTeleOp extends OpMode {
          * The argument in quotes is the name of the motor. You set this in the robot profile
          * on the robot controller phone.
          */
-        //motorOne = hardwareMap.dcMotor.get("motor one"); // MAP ALL THE HARDWARE
-        //motorTwo = hardwareMap.dcMotor.get("motor two"); // HARDWARE ALL THE MAP
-        //motorThree = hardwareMap.dcMotor.get("motor three");
-        //motorFour = hardwareMap.dcMotor.get("motor four");
-        liftMotor = hardwareMap.get(DcMotorSimple.class, "lift Motor");
+        liftMotor = hardwareMap.get(DcMotor.class, "lift Motor");
         driveWheel = hardwareMap.get(DcMotor.class, "driveWheel");
         driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
         blockGrabber = hardwareMap.get(Servo.class, "blockGrabber");
         blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
-        //ballShooter = hardwareMap.dcMotor.get("ball shooter");
-
-        //liftMotor.setPower(0);
-        //hello
+        ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
 
 
         // You have to reverse one motor, otherwise a power value of 1.0 would make the motors run
@@ -130,9 +124,12 @@ public class MainTeleOp extends OpMode {
         // for one motor and -1.0 for the other motor.
 //        liftMotor.setDirection(DcMotor.Direction.REVERSE);
 //        motorThree.setDirection(DcMotorSimple.Direction.REVERSE);
-        driveWheel.setDirection(DcMotorSimple.Direction.REVERSE);
-//
-        //liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        driveWheel.setDirection(DcMotor.Direction.REVERSE);
+
+        liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        ballSensorServo.setPosition(-0.8);
+
 
     }
 
@@ -198,6 +195,8 @@ public class MainTeleOp extends OpMode {
         }
         */
 
+        //This is the code for the driving wheels
+        //The turning responds to the two gamepad triggers
         if(gamepad1.right_trigger > 0 && gamepad1.left_trigger == 0){
             driveWheel.setPower(MOTOR_FULL_POWER);
             driveWheel2.setPower(-MOTOR_FULL_POWER);
@@ -207,6 +206,7 @@ public class MainTeleOp extends OpMode {
             driveWheel2.setPower(MOTOR_FULL_POWER);
         }
         else {
+            //Joystick values trigger forward and backward motion
             driveWheel.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
             driveWheel2.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
         }
@@ -216,8 +216,11 @@ public class MainTeleOp extends OpMode {
 
         //region Lifting motor
 
-        if(gamepad1.dpad_up){
-            liftMotor.setPower(MOTOR_FULL_POWER);
+        //Lift motor runs with an encoder
+        int position = liftMotor.getCurrentPosition();
+
+        if(gamepad1.dpad_up && Math.abs(liftMotor.getCurrentPosition()) <= 7674){
+            liftMotor.setPower(MOTOR_HALF_POWER);
         }
         else if(gamepad1.dpad_down) {
             liftMotor.setPower(-MOTOR_HALF_POWER);
@@ -227,27 +230,11 @@ public class MainTeleOp extends OpMode {
         }
 
         telemetry.addData("Lift Motor", + liftMotor.getPower());
+        telemetry.addData("Encoder position: ", position);
 
         //endregion
 
         //region Block grabbing servos
-
-            // Here I am testing to see the position of the servos
-
-        /*if(gamepad1.left_bumper){
-            blockGrabberPosition += INCREMENT_SPEED;
-            blockGrabberPosition2 -= INCREMENT_SPEED;
-        }
-        else if(gamepad1.right_bumper) {
-            blockGrabberPosition -= INCREMENT_SPEED;
-            blockGrabberPosition2 += INCREMENT_SPEED;
-        }
-
-        blockGrabber.setPosition(blockGrabberPosition); //Here I give the servos the blockGrabberPosition values
-        blockGrabber2.setPosition(blockGrabberPosition2);
-
-        telemetry.addData("blockGrabber", "%.2f", blockGrabberPosition); //Important --> shows the values of the servo on the phone
-        telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);*/
 
         if(gamepad1.right_bumper){
             blockGrabber.setPosition(0.40);
@@ -265,6 +252,33 @@ public class MainTeleOp extends OpMode {
             // BlockGrabber = 0.32;
             // BlockGrabber2 = 0.69
         //TODO: Find the final values for the servo
+
+
+
+        //endregion
+
+        //region ball Sensing Mechanism
+
+        if(gamepad1.a){
+            ballSensorServo.setPosition(-0.15);
+        }
+        else{
+            ballSensorServo.setPosition(-0.8);
+        }
+
+
+
+        /*if(gamepad1.a){
+             -= INCREMENT_SPEED;
+        }
+        else if(gamepad1.x) {
+            ballServoPosition += INCREMENT_SPEED;
+        }*/
+
+        //ballSensorServo.setPosition(ballServoPosition); //Here I give the servos the blockGrabberPosition values
+
+        //telemetry.addData("ballSensorServo", "%.2f", ballServoPosition); //Important --> shows the values of the servo on the phone
+        //telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);
 
 
 
