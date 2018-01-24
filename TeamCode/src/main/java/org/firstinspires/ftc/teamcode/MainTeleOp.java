@@ -128,7 +128,7 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ballSensorServo.setPosition(-0.8);
+        ballSensorServo.setPosition(0.6);
 
 
     }
@@ -217,9 +217,12 @@ public class MainTeleOp extends OpMode {
         //region Lifting motor
 
         //Lift motor runs with an encoder
+
+        //&& Math.abs(liftMotor.getCurrentPosition()
+
         int position = liftMotor.getCurrentPosition();
 
-        if(gamepad1.dpad_up && Math.abs(liftMotor.getCurrentPosition()) <= 7674){
+        if(gamepad1.dpad_up){
             liftMotor.setPower(MOTOR_HALF_POWER);
         }
         else if(gamepad1.dpad_down) {
@@ -259,12 +262,20 @@ public class MainTeleOp extends OpMode {
 
         //region ball Sensing Mechanism
 
+        //double servoPosition = 0.6;
+
+        double whatServoPosition = ballSensorServo.getPosition();
+
         if(gamepad1.a){
-            ballSensorServo.setPosition(-0.15);
+            ballSensorServo.setPosition(0.4);
         }
-        else{
+        else {
             ballSensorServo.setPosition(-0.8);
         }
+
+        //ballSensorServo.setPosition(servoPosition);
+
+        telemetry.addData("Servo position: ", whatServoPosition);
 
 
 
