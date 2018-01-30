@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor.RunMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.HardwareMap;
@@ -87,9 +88,10 @@ public class MainTeleOp extends OpMode {
     DcMotor liftMotor;
     DcMotor driveWheel;
     DcMotor driveWheel2;
+    DcMotor driveWheel3;
     Servo blockGrabber;
     Servo blockGrabber2;
-    Servo ballSensorServo;
+    //Servo ballSensorServo;
 
 
     // Similarly, if you wanted to define a servo, you would put:
@@ -116,7 +118,8 @@ public class MainTeleOp extends OpMode {
         driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
         blockGrabber = hardwareMap.get(Servo.class, "blockGrabber");
         blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
-        ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
+        //ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
+        driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheelSide");
 
 
         // You have to reverse one motor, otherwise a power value of 1.0 would make the motors run
@@ -128,7 +131,7 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        ballSensorServo.setPosition(0.6);
+        //ballSensorServo.setPosition(0.6);
 
 
     }
@@ -198,17 +201,26 @@ public class MainTeleOp extends OpMode {
         //This is the code for the driving wheels
         //The turning responds to the two gamepad triggers
         if(gamepad1.right_trigger > 0 && gamepad1.left_trigger == 0){
-            driveWheel.setPower(MOTOR_FULL_POWER);
-            driveWheel2.setPower(-MOTOR_FULL_POWER);
+            driveWheel.setPower(MOTOR_HALF_POWER);
+            driveWheel2.setPower(-MOTOR_HALF_POWER);
         }
         else if(gamepad1.left_trigger > 0 && gamepad1.right_trigger == 0) {
-            driveWheel.setPower(-MOTOR_FULL_POWER);
+            driveWheel.setPower(-MOTOR_HALF_POWER);
+            driveWheel2.setPower(MOTOR_HALF_POWER);
+        }
+        else if(gamepad1.a){
+            driveWheel.setPower(MOTOR_FULL_POWER);
             driveWheel2.setPower(MOTOR_FULL_POWER);
+        }
+        else if(gamepad1.b){
+            driveWheel.setPower(MOTOR_HALF_POWER);
+            driveWheel2.setPower(MOTOR_HALF_POWER);
         }
         else {
             //Joystick values trigger forward and backward motion
             driveWheel.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
             driveWheel2.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
+            driveWheel3.setPower(joystickToMotorValue(-gamepad1.left_stick_x));
         }
 
 
@@ -222,10 +234,10 @@ public class MainTeleOp extends OpMode {
 
         int position = liftMotor.getCurrentPosition();
 
-        if(gamepad1.dpad_up){
-            liftMotor.setPower(MOTOR_HALF_POWER);
+        if(gamepad1.dpad_up && liftMotor.getCurrentPosition() < 8600){
+            liftMotor.setPower(MOTOR_LESS_POWER);
         }
-        else if(gamepad1.dpad_down) {
+        else if(gamepad1.dpad_down && liftMotor.getCurrentPosition() > -193) {
             liftMotor.setPower(-MOTOR_HALF_POWER);
         }
         else {
@@ -264,7 +276,7 @@ public class MainTeleOp extends OpMode {
 
         //double servoPosition = 0.6;
 
-        double whatServoPosition = ballSensorServo.getPosition();
+       /*double whatServoPosition = ballSensorServo.getPosition();
 
         if(gamepad1.a){
             ballSensorServo.setPosition(0.4);
@@ -275,7 +287,7 @@ public class MainTeleOp extends OpMode {
 
         //ballSensorServo.setPosition(servoPosition);
 
-        telemetry.addData("Servo position: ", whatServoPosition);
+        telemetry.addData("Servo position: ", whatServoPosition);*/
 
 
 
