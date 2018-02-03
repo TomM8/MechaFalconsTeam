@@ -37,6 +37,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -87,7 +88,7 @@ public class MainTeleOp extends OpMode {
     DcMotor driveWheelSide;
     DcMotor driveWheel3;
     DcMotor driveWheel4;
-    Servo blockGrabber;
+    Servo blockGrabber1;
     Servo blockGrabber2;
     Servo ballSensorServo;
 
@@ -111,10 +112,10 @@ public class MainTeleOp extends OpMode {
          * The argument in quotes is the name of the motor. You set this in the robot profile
          * on the robot controller phone.
          */
-        liftMotor = hardwareMap.get(DcMotor.class, "lift Motor");
+        liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         driveWheel1 = hardwareMap.get(DcMotor.class, "driveWheel1");
         driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
-        blockGrabber = hardwareMap.get(Servo.class, "blockGrabber");
+        blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
         blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
         ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
         driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
@@ -128,6 +129,7 @@ public class MainTeleOp extends OpMode {
 //        liftMotor.setDirection(DcMotor.Direction.REVERSE);
 //        motorThree.setDirection(DcMotorSimple.Direction.REVERSE);
         driveWheel1.setDirection(DcMotor.Direction.REVERSE);
+        driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
         liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -178,17 +180,21 @@ public class MainTeleOp extends OpMode {
         if(gamepad1.right_trigger > 0 && gamepad1.left_trigger == 0){
             driveWheel1.setPower(MOTOR_HALF_POWER);
             driveWheel2.setPower(-MOTOR_HALF_POWER);
+            driveWheel3.setPower(MOTOR_HALF_POWER);
+            driveWheel4.setPower(-MOTOR_HALF_POWER);
         }
         else if(gamepad1.left_trigger > 0 && gamepad1.right_trigger == 0) {
             driveWheel1.setPower(-MOTOR_HALF_POWER);
             driveWheel2.setPower(MOTOR_HALF_POWER);
+            driveWheel3.setPower(-MOTOR_HALF_POWER);
+            driveWheel4.setPower(MOTOR_HALF_POWER);
         }
         else {
             //Joystick values trigger forward and backward motion
-            driveWheel1.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
-            driveWheel2.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
-            driveWheel3.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
-            driveWheel4.setPower(joystickToMotorValue(-gamepad1.left_stick_y));
+            driveWheel1.setPower(joystickToMotorValue(-gamepad1.left_stick_y)/0.5);
+            driveWheel2.setPower(joystickToMotorValue(-gamepad1.left_stick_y)/0.5);
+            driveWheel3.setPower(joystickToMotorValue(-gamepad1.left_stick_y)/0.5);
+            driveWheel4.setPower(joystickToMotorValue(-gamepad1.left_stick_y)/0.5);
             driveWheelSide.setPower(joystickToMotorValue(-gamepad1.left_stick_x));
         }
 
@@ -204,15 +210,18 @@ public class MainTeleOp extends OpMode {
         int minHeight = liftMotor.getCurrentPosition();
         int maxHeight = minHeight+8961;
 
-        if(gamepad1.y && liftMotor.getCurrentPosition() < maxHeight){
-            liftMotor.setPower(MOTOR_LESS_POWER);
-        }
-        else if(gamepad1.a && liftMotor.getCurrentPosition() > minHeight) {
+        if (!gamepad1.b) {
+            if (gamepad1.y && liftMotor.getCurrentPosition() < maxHeight) {
+                liftMotor.setPower(MOTOR_LESS_POWER);
+            } else if (gamepad1.a && liftMotor.getCurrentPosition() > minHeight) {
+                liftMotor.setPower(-MOTOR_HALF_POWER);
+            } else {
+                liftMotor.setPower(MOTOR_POWER_OFF);
+            }
+        } else {
             liftMotor.setPower(-MOTOR_HALF_POWER);
         }
-        else {
-            liftMotor.setPower(MOTOR_POWER_OFF);
-        }
+
 
         telemetry.addData("Lift Motor", + liftMotor.getPower());
         telemetry.addData("Encoder position: ", minHeight);
@@ -225,11 +234,11 @@ public class MainTeleOp extends OpMode {
         //region Block grabbing servos
 
         if(gamepad1.right_bumper){
-            blockGrabber.setPosition(0.40);
+            blockGrabber1.setPosition(0.40);
             blockGrabber2.setPosition(0.70);
         }
         else {
-            blockGrabber.setPosition(0.72);
+            blockGrabber1.setPosition(0.72);
             blockGrabber2.setPosition(0.29);
         }
 
@@ -246,24 +255,8 @@ public class MainTeleOp extends OpMode {
         //endregion
 
         //region ball Sensing Mechanism
-
-        //double servoPosition = 0.6;
-
-       /*double whatServoPosition = ballSensorServo.getPosition();
-
-        if(gamepad1.a){
-            ballSensorServo.setPosition(0.4);
-        }
-        else {
-            ballSensorServo.setPosition(-0.8);
-        }
-
-        //ballSensorServo.setPosition(servoPosition);
-
-        telemetry.addData("Servo position: ", whatServoPosition);*/
-
-
-
+        //TODO: The reason this doesn't work is because it wants to set to the zero position which it can't access
+        //TODO: To fix it, you have to see where it is at zero without it being attached to the robot and the roughly input a value which it can access as home
         if(gamepad1.dpad_down){
             ballServoPosition -= INCREMENT_SPEED;
         }

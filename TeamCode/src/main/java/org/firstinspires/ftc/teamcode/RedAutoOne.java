@@ -31,10 +31,10 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * This file illustrates the concept of driving a path based on time.
@@ -57,9 +57,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BlueAuto", group="Autonomous")
+@Autonomous(name="RedAuto", group="Autonomous")
 //@Disabled
-public class BlueAutoOne extends LinearOpMode {
+public class RedAutoOne extends LinearOpMode {
 
     /* Declare OpMode members. */
     MainTeleOp robot  = new MainTeleOp();   // Use a the hardware from the TeleOp
@@ -117,15 +117,15 @@ public class BlueAutoOne extends LinearOpMode {
 
         robot.ballSensorServo.setPosition(0.5); //TODO: This has to be the position where the sensor is at the balls
 
-        while(colorSensor.blue() >= 100 && colorSensor.red() == 0){
+        while(colorSensor.red() >= 100 && colorSensor.blue() == 0){
             driveF(0.3, 200); // Have to test power and time
         }
-        while(colorSensor.blue() == 0 && colorSensor.red() >= 100){
+        while(colorSensor.red() == 0 && colorSensor.blue() >= 100){
             driveR(0.3, 200);
         }
 
         robot.ballSensorServo.setPosition(1.0); //TODO: This will have to be changes to the home position
-        
+
     }
 
     public void driveF(double power, int time) throws InterruptedException {
