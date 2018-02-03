@@ -113,6 +113,9 @@ public class RedAutoOne extends LinearOpMode {
         colorSensor.red();
         colorSensor.blue();
 
+        telemetry.addData("SensedRedNumber: ", colorSensor.red());
+        telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
+
         //TODO: This is the theoretical autonomous
 
         robot.ballSensorServo.setPosition(0.5); //TODO: This has to be the position where the sensor is at the balls

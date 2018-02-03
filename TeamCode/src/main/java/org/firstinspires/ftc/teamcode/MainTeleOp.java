@@ -135,9 +135,6 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        //ballSensorServo.setPosition(0.6);
-
-
     }
 
 
@@ -273,8 +270,6 @@ public class MainTeleOp extends OpMode {
 
         //endregion
 
-
-        //Gotta write up that code for the shooting mechanism
     }
 
     /*
