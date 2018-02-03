@@ -30,16 +30,8 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file illustrates the concept of driving a path based on time.
@@ -63,7 +55,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  */
 
 @Autonomous(name="Blue One Auto", group="Autonomous")
-@Disabled
+//@Disabled
 public class BlueAutoOne extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -82,7 +74,7 @@ public class BlueAutoOne extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        //robot.init(hardwareMap);e
+        //robot.init(hardwareMap);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -97,28 +89,28 @@ public class BlueAutoOne extends LinearOpMode {
     }
 
     public void driveF(double power, int time) throws InterruptedException {
-        robot.driveWheel.setPower(power);
+        robot.driveWheel1.setPower(power);
         robot.driveWheel2.setPower(power);
         Thread.sleep(time);
     }
     public void driveR(double power, int time) throws InterruptedException {
-        robot.driveWheel.setPower(-power);
+        robot.driveWheel1.setPower(-power);
         robot.driveWheel2.setPower(-power);
         Thread.sleep(time);
     }
 
     public void driveLeft(double power, int time) throws InterruptedException {
-        robot.driveWheel3.setPower(-power);
+        robot.driveWheelSide.setPower(-power);
         Thread.sleep(time);
     }
 
     public void driveRigth(double power, int time) throws InterruptedException {
-        robot.driveWheel3.setPower(power);
+        robot.driveWheelSide.setPower(power);
         Thread.sleep(time);
     }
 
     public void stopDriving() {
-        robot.driveWheel.setPower(0.0);
+        robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
     }
 
