@@ -118,14 +118,18 @@ public class BlueAutoOne extends LinearOpMode {
 
         //TODO: This is the theoretical autonomous
 
-        robot.ballSensorServo.setPosition(0.5); //TODO: This has to be the position where the sensor is at the balls
+        wait(2000);
+
+        robot.ballSensorServo.setPosition(0.17); //TODO: This has to be the position where the sensor is at the balls
 
         while(colorSensor.blue() >= 100 && colorSensor.red() == 0){
-            driveF(0.3, 200); // Have to test power and time
+            driveF(0.3, 800); // Have to test power and time
         }
         while(colorSensor.blue() == 0 && colorSensor.red() >= 100){
-            driveR(0.3, 200);
+            driveR(0.3, 800);
         }
+
+        wait(2000);
 
         robot.ballSensorServo.setPosition(1.0); //TODO: This will have to be changes to the home position
 

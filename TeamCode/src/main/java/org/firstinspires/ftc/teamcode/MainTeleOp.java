@@ -135,6 +135,8 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
+        ballSensorServo.setPosition(1.0);
+
     }
 
 
@@ -254,7 +256,7 @@ public class MainTeleOp extends OpMode {
         //region ball Sensing Mechanism
         //TODO: The reason this doesn't work is because it wants to set to the zero position which it can't access
         //TODO: To fix it, you have to see where it is at zero without it being attached to the robot and the roughly input a value which it can access as home
-        if(gamepad1.dpad_down){
+        /*if(gamepad1.dpad_down){
             ballServoPosition -= INCREMENT_SPEED;
         }
         else if(gamepad1.dpad_up) {
@@ -264,7 +266,19 @@ public class MainTeleOp extends OpMode {
         ballSensorServo.setPosition(ballServoPosition); //Here I give the servos the blockGrabberPosition values
 
         telemetry.addData("ballSensorServo", "%.2f", ballServoPosition); //Important --> shows the values of the servo on the phone
-        //telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);
+        //telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);*/
+
+        if(gamepad1.x){
+            ballSensorServo.setPosition(0.17);
+        }
+        else {
+            ballSensorServo.setPosition(1.0);
+        }
+
+        //TODO: This might have been done, but we have to change the servo to be places horizontally
+        double ServoPosition = ballSensorServo.getPosition();
+
+        telemetry.addData("Servo Position: ", ServoPosition);
 
 
 
