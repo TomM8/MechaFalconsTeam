@@ -135,7 +135,10 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        ballSensorServo.setPosition(1.0);
+        ballSensorServo.setPosition(0.85);
+
+        blockGrabber1.setPosition(0.72);
+        blockGrabber2.setPosition(0.29);
 
     }
 
@@ -209,16 +212,16 @@ public class MainTeleOp extends OpMode {
         int minHeight = liftMotor.getCurrentPosition();
         int maxHeight = minHeight+8961;
 
-        if (!gamepad1.b) {
+        if (!gamepad1.a) {
             if (gamepad1.y && liftMotor.getCurrentPosition() < maxHeight) {
                 liftMotor.setPower(MOTOR_LESS_POWER);
-            } else if (gamepad1.a && liftMotor.getCurrentPosition() > minHeight) {
+            } else if (gamepad1.b && liftMotor.getCurrentPosition() > minHeight) {
                 liftMotor.setPower(-MOTOR_HALF_POWER);
             } else {
                 liftMotor.setPower(MOTOR_POWER_OFF);
             }
         } else {
-            liftMotor.setPower(-MOTOR_HALF_POWER);
+            liftMotor.setPower(-MOTOR_LESS_POWER);
         }
 
 
@@ -269,10 +272,10 @@ public class MainTeleOp extends OpMode {
         //telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);*/
 
         if(gamepad1.x){
-            ballSensorServo.setPosition(0.17);
+            ballSensorServo.setPosition(0.10);
         }
         else {
-            ballSensorServo.setPosition(1.0);
+            ballSensorServo.setPosition(0.70);
         }
 
         //TODO: This might have been done, but we have to change the servo to be places horizontally

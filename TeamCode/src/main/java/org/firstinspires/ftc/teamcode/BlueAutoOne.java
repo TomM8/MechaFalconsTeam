@@ -82,10 +82,10 @@ public class BlueAutoOne extends LinearOpMode {
         //robot.liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         robot.driveWheel1 = hardwareMap.get(DcMotor.class, "driveWheel1");
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
-        //robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
-        //robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
+        robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
+        robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
         robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
-        //robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
+        robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -99,7 +99,12 @@ public class BlueAutoOne extends LinearOpMode {
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
-        robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.ballSensorServo.setPosition(0.10);
+
+        robot.blockGrabber1.setPosition(0.72);
+        robot.blockGrabber2.setPosition(0.29);
+
+        //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -110,28 +115,33 @@ public class BlueAutoOne extends LinearOpMode {
 
         colorSensor.enableLed(true); // Turn the light on for objects and turn it off if sensing color of lit up objects
 
+        //TODO: This is the theoretical autonomous
+
+        //wait(2000);
+
+        double position = robot.ballSensorServo.getPosition();
+        robot.ballSensorServo.setPosition(position);
+
+        //driveRight(0.3, 400);
+
+        //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
+
+        if(colorSensor.blue() >= 100){
+            driveR(0.2, 300); // Have to test power and time
+        }
+        else if(colorSensor.blue() == 0){
+            driveF(0.2, 300);
+        }
+
+        //wait(2000);
+
         colorSensor.red();
         colorSensor.blue();
 
         telemetry.addData("SensedRedNumber: ", colorSensor.red());
         telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
 
-        //TODO: This is the theoretical autonomous
-
-        wait(2000);
-
-        robot.ballSensorServo.setPosition(0.17); //TODO: This has to be the position where the sensor is at the balls
-
-        while(colorSensor.blue() >= 100 && colorSensor.red() == 0){
-            driveF(0.3, 800); // Have to test power and time
-        }
-        while(colorSensor.blue() == 0 && colorSensor.red() >= 100){
-            driveR(0.3, 800);
-        }
-
-        wait(2000);
-
-        robot.ballSensorServo.setPosition(1.0); //TODO: This will have to be changes to the home position
+        robot.ballSensorServo.setPosition(0.85); //TODO: This will have to be changes to the home position
 
     }
 
@@ -151,12 +161,12 @@ public class BlueAutoOne extends LinearOpMode {
     }
 
     public void driveLeft(double power, int time) throws InterruptedException {
-        robot.driveWheelSide.setPower(-power);
+        robot.driveWheelSide.setPower(power);
         Thread.sleep(time);
     }
 
-    public void driveRigth(double power, int time) throws InterruptedException {
-        robot.driveWheelSide.setPower(power);
+    public void driveRight(double power, int time) throws InterruptedException {
+        robot.driveWheelSide.setPower(-power);
         Thread.sleep(time);
     }
 

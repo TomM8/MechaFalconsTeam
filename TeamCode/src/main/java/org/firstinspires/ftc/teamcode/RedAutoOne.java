@@ -99,39 +99,42 @@ public class RedAutoOne extends LinearOpMode {
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
-        robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        robot.ballSensorServo.setPosition(0.10);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
         telemetry.update();
+
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
         colorSensor.enableLed(true); // Turn the light on for objects and turn it off if sensing color of lit up objects
 
+        //TODO: This is the theoretical autonomous
+
+        //wait(2000);
+
+        //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
+
+        while(colorSensor.red() >= 100){
+            driveR(0.3, 800); // Have to test power and time
+        }
+        while(colorSensor.red() == 0){
+            driveF(0.3, 800);
+        }
+
+        //wait(2000);
+
+        robot.ballSensorServo.setPosition(0.85); //TODO: This will have to be changes to the home position
+
         colorSensor.red();
         colorSensor.blue();
 
         telemetry.addData("SensedRedNumber: ", colorSensor.red());
         telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
-
-        //TODO: This is the theoretical autonomous
-
-        wait(2000);
-
-        robot.ballSensorServo.setPosition(0.17); //TODO: This has to be the position where the sensor is at the balls
-
-        while(colorSensor.red() >= 100 && colorSensor.blue() == 0){
-            driveF(0.3, 800); // Have to test power and time
-        }
-        while(colorSensor.red() == 0 && colorSensor.blue() >= 100){
-            driveR(0.3, 800);
-        }
-
-        wait(2000);
-
-        robot.ballSensorServo.setPosition(1.0); //TODO: This will have to be changes to the home position
 
     }
 
