@@ -57,9 +57,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="RedAutoForward", group="Autonomous")
+@Autonomous(name="RedAutoBackward", group="Autonomous")
 //@Disabled
-public class RedAutoOne extends LinearOpMode {
+public class RedAutoTwo extends LinearOpMode {
 
     /* Declare OpMode members. */
     MainTeleOp robot  = new MainTeleOp();   // Use a the hardware from the TeleOp
@@ -122,13 +122,11 @@ public class RedAutoOne extends LinearOpMode {
         if (colorSensor.red() > 0){
             turnLeft(0.4, 300);
             robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
             turnRight(0.4, 250);
         }
         else if(colorSensor.blue() > 0){
             turnRight(0.4, 300);
             robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
             turnLeft(0.4, 250);
         }
         else if(colorSensor.red() == 0 && colorSensor.blue() == 0){
@@ -136,7 +134,7 @@ public class RedAutoOne extends LinearOpMode {
             robot.ballSensorServo.setPosition(0);
         }
 
-        driveF(0.4, 2000);
+        driveR(0.4, 2000);
 
         //wait(2000);
 

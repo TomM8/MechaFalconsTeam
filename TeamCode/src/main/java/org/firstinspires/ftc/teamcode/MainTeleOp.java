@@ -34,6 +34,8 @@ THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -41,6 +43,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 
 /**
  * CONTROL SCHEME
@@ -91,6 +94,7 @@ public class MainTeleOp extends OpMode {
     Servo blockGrabber1;
     Servo blockGrabber2;
     Servo ballSensorServo;
+    ColorSensor colorSensor;
 
 
     // Similarly, if you wanted to define a servo, you would put:
@@ -121,6 +125,7 @@ public class MainTeleOp extends OpMode {
         driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
+        colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
 
 
         // You have to reverse one motor, otherwise a power value of 1.0 would make the motors run
@@ -135,7 +140,7 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        ballSensorServo.setPosition(0.85);
+        ballSensorServo.setPosition(0);
 
         blockGrabber1.setPosition(0.72);
         blockGrabber2.setPosition(0.29);
@@ -163,6 +168,14 @@ public class MainTeleOp extends OpMode {
     @Override
     // This runs after the "play" button is pressed and before the "stop" button is pressed
     public void loop() {
+
+        //colorSensor.enableLed(true);
+
+        //colorSensor.red();
+        //colorSensor.blue();
+
+        //telemetry.addData("sensing red value: ", colorSensor.red());
+        //telemetry.addData("sensing blue value: ", colorSensor.blue());
 
         // If you put the cursor on a comment that says "region" and press command-minus, you can collapse the code
 
@@ -272,10 +285,10 @@ public class MainTeleOp extends OpMode {
         //telemetry.addData("blockGrabber2", "%.2f", blockGrabberPosition2);*/
 
         if(gamepad1.x){
-            ballSensorServo.setPosition(0.10);
+            ballSensorServo.setPosition(0.8);
         }
         else {
-            ballSensorServo.setPosition(0.70);
+            ballSensorServo.setPosition(0);
         }
 
         //TODO: This might have been done, but we have to change the servo to be places horizontally

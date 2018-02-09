@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BlueAuto", group="Autonomous")
+@Autonomous(name="BlueAutoForward", group="Autonomous")
 //@Disabled
 public class BlueAutoOne extends LinearOpMode {
 
@@ -99,7 +99,7 @@ public class BlueAutoOne extends LinearOpMode {
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
-        robot.ballSensorServo.setPosition(0.10);
+        robot.ballSensorServo.setPosition(0.75);
 
         robot.blockGrabber1.setPosition(0.72);
         robot.blockGrabber2.setPosition(0.29);
@@ -107,17 +107,17 @@ public class BlueAutoOne extends LinearOpMode {
         //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
+        telemetry.addData("Status", "Ready to run");
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
 
+        //wait(2000);
+
         colorSensor.enableLed(true); // Turn the light on for objects and turn it off if sensing color of lit up objects
 
         //TODO: This is the theoretical autonomous
-
-        //wait(2000);
 
         double position = robot.ballSensorServo.getPosition();
         robot.ballSensorServo.setPosition(position);
@@ -126,14 +126,24 @@ public class BlueAutoOne extends LinearOpMode {
 
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
-        if(colorSensor.blue() >= 100){
-            turnRight(0.4, 300);
+        if(colorSensor.blue() > 0){
             turnLeft(0.4, 300);
-        }
-        else if(colorSensor.blue() == 0){
-            turnLeft(0.4, 300);
+            robot.ballSensorServo.setPosition(0);
+            stopDriving(1000);
             turnRight(0.4, 300);
         }
+        else if(colorSensor.red() > 0){
+            turnRight(0.4, 300);
+            robot.ballSensorServo.setPosition(0);
+            stopDriving(1000);
+            turnLeft(0.4, 500);
+        }
+        else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
+            stopDriving(1000);
+            robot.ballSensorServo.setPosition(0);
+        }
+
+        driveF(0.4, 2000);
 
         //wait(2000);
 
@@ -143,7 +153,7 @@ public class BlueAutoOne extends LinearOpMode {
         telemetry.addData("SensedRedNumber: ", colorSensor.red());
         telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
 
-        robot.ballSensorServo.setPosition(0.85); //TODO: This will have to be changes to the home position
+        robot.ballSensorServo.setPosition(0); //TODO: This will have to be changes to the home position
 
     }
 
@@ -163,19 +173,19 @@ public class BlueAutoOne extends LinearOpMode {
     }
 
     public void turnRight(double power, int time) throws InterruptedException {
-        robot.driveWheel1.setPower(-power);
-        robot.driveWheel2.setPower(power);
-        robot.driveWheel3.setPower(-power);
-        robot.driveWheel4.setPower(power);
+        robot.driveWheel1.setPower(power);
+        robot.driveWheel2.setPower(-power);
+        robot.driveWheel3.setPower(power);
+        robot.driveWheel4.setPower(-power);
         Thread.sleep(time);
 
     }
 
     public void turnLeft(double power, int time) throws InterruptedException {
-        robot.driveWheel1.setPower(power);
-        robot.driveWheel2.setPower(-power);
-        robot.driveWheel3.setPower(power);
-        robot.driveWheel4.setPower(-power);
+        robot.driveWheel1.setPower(-power);
+        robot.driveWheel2.setPower(power);
+        robot.driveWheel3.setPower(-power);
+        robot.driveWheel4.setPower(power);
         Thread.sleep(time);
 
     }
@@ -190,11 +200,12 @@ public class BlueAutoOne extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void stopDriving() {
+    public void stopDriving(int time) throws InterruptedException {
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
+        Thread.sleep(time);
     }
 
 }

@@ -57,9 +57,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="RedAutoForward", group="Autonomous")
+@Autonomous(name="BlueAutoBackward", group="Autonomous")
 //@Disabled
-public class RedAutoOne extends LinearOpMode {
+public class BlueAutoTwo extends LinearOpMode {
 
     /* Declare OpMode members. */
     MainTeleOp robot  = new MainTeleOp();   // Use a the hardware from the TeleOp
@@ -82,10 +82,10 @@ public class RedAutoOne extends LinearOpMode {
         //robot.liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         robot.driveWheel1 = hardwareMap.get(DcMotor.class, "driveWheel1");
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
-        //robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
-        //robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
+        robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
+        robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
         robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
-        //robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
+        robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -99,14 +99,16 @@ public class RedAutoOne extends LinearOpMode {
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
-        //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
         robot.ballSensorServo.setPosition(0.75);
 
-        // Send telemetry message to signify robot waiting;
-        telemetry.addData("Status", "Ready to run");    //
-        telemetry.update();
+        robot.blockGrabber1.setPosition(0.72);
+        robot.blockGrabber2.setPosition(0.29);
 
+        //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        // Send telemetry message to signify robot waiting;
+        telemetry.addData("Status", "Ready to run");
+        telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
         waitForStart();
@@ -117,36 +119,41 @@ public class RedAutoOne extends LinearOpMode {
 
         //TODO: This is the theoretical autonomous
 
+        double position = robot.ballSensorServo.getPosition();
+        robot.ballSensorServo.setPosition(position);
+
+        //driveRight(0.3, 400);
+
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
-        if (colorSensor.red() > 0){
+        if(colorSensor.blue() > 0){
             turnLeft(0.4, 300);
             robot.ballSensorServo.setPosition(0);
             stopDriving(1000);
-            turnRight(0.4, 250);
+            turnRight(0.4, 300);
         }
-        else if(colorSensor.blue() > 0){
+        else if(colorSensor.red() > 0){
             turnRight(0.4, 300);
             robot.ballSensorServo.setPosition(0);
             stopDriving(1000);
-            turnLeft(0.4, 250);
+            turnLeft(0.4, 500);
         }
-        else if(colorSensor.red() == 0 && colorSensor.blue() == 0){
+        else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
             stopDriving(1000);
             robot.ballSensorServo.setPosition(0);
         }
 
-        driveF(0.4, 2000);
+        driveR(0.4, 2000);
 
         //wait(2000);
-
-        //robot.ballSensorServo.setPosition(0); //TODO: This will have to be changes to the home position
 
         colorSensor.red();
         colorSensor.blue();
 
         telemetry.addData("SensedRedNumber: ", colorSensor.red());
         telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
+
+        robot.ballSensorServo.setPosition(0); //TODO: This will have to be changes to the home position
 
     }
 
@@ -184,12 +191,12 @@ public class RedAutoOne extends LinearOpMode {
     }
 
     public void driveLeft(double power, int time) throws InterruptedException {
-        robot.driveWheelSide.setPower(-power);
+        robot.driveWheelSide.setPower(power);
         Thread.sleep(time);
     }
 
     public void driveRight(double power, int time) throws InterruptedException {
-        robot.driveWheelSide.setPower(power);
+        robot.driveWheelSide.setPower(-power);
         Thread.sleep(time);
     }
 

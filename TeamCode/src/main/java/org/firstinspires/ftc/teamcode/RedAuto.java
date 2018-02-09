@@ -57,9 +57,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="RedAutoForward", group="Autonomous")
+@Autonomous(name="RedAuto", group="Autonomous")
 //@Disabled
-public class RedAutoOne extends LinearOpMode {
+public class RedAuto extends LinearOpMode {
 
     /* Declare OpMode members. */
     MainTeleOp robot  = new MainTeleOp();   // Use a the hardware from the TeleOp
@@ -121,22 +121,18 @@ public class RedAutoOne extends LinearOpMode {
 
         if (colorSensor.red() > 0){
             turnLeft(0.4, 300);
-            robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
-            turnRight(0.4, 250);
+            //turnRight(0.4, 250);
         }
         else if(colorSensor.blue() > 0){
             turnRight(0.4, 300);
-            robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
-            turnLeft(0.4, 250);
+            //turnLeft(0.4, 250);
         }
         else if(colorSensor.red() == 0 && colorSensor.blue() == 0){
-            stopDriving(1000);
+            stopDriving();
             robot.ballSensorServo.setPosition(0);
         }
 
-        driveF(0.4, 2000);
+        //driveF(0.4, 700);
 
         //wait(2000);
 
@@ -188,17 +184,16 @@ public class RedAutoOne extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void driveRight(double power, int time) throws InterruptedException {
+    public void driveRigth(double power, int time) throws InterruptedException {
         robot.driveWheelSide.setPower(power);
         Thread.sleep(time);
     }
 
-    public void stopDriving(int time) throws InterruptedException {
+    public void stopDriving() {
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
-        Thread.sleep(time);
     }
 
 }
