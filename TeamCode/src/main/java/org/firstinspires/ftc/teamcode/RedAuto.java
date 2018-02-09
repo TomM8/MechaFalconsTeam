@@ -184,7 +184,7 @@ public class RedAuto extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void driveRigth(double power, int time) throws InterruptedException {
+    public void driveRight(double power, int time) throws InterruptedException {
         robot.driveWheelSide.setPower(power);
         Thread.sleep(time);
     }
