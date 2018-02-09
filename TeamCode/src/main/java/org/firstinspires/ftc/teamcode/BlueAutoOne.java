@@ -127,10 +127,12 @@ public class BlueAutoOne extends LinearOpMode {
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
         if(colorSensor.blue() >= 100){
-            driveR(0.2, 300); // Have to test power and time
+            turnRight(0.4, 300);
+            turnLeft(0.4, 300);
         }
         else if(colorSensor.blue() == 0){
-            driveF(0.2, 300);
+            turnLeft(0.4, 300);
+            turnRight(0.4, 300);
         }
 
         //wait(2000);
@@ -158,6 +160,24 @@ public class BlueAutoOne extends LinearOpMode {
         robot.driveWheel3.setPower(-power);
         robot.driveWheel4.setPower(-power);
         Thread.sleep(time);
+    }
+
+    public void turnRight(double power, int time) throws InterruptedException {
+        robot.driveWheel1.setPower(-power);
+        robot.driveWheel2.setPower(power);
+        robot.driveWheel3.setPower(-power);
+        robot.driveWheel4.setPower(power);
+        Thread.sleep(time);
+
+    }
+
+    public void turnLeft(double power, int time) throws InterruptedException {
+        robot.driveWheel1.setPower(power);
+        robot.driveWheel2.setPower(-power);
+        robot.driveWheel3.setPower(power);
+        robot.driveWheel4.setPower(-power);
+        Thread.sleep(time);
+
     }
 
     public void driveLeft(double power, int time) throws InterruptedException {
