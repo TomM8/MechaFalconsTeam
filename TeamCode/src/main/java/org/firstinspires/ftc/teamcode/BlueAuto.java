@@ -132,12 +132,12 @@ public class BlueAuto extends LinearOpMode {
         }
         else if(colorSensor.red() > 0){
             turnRight(0.4, 300);
-            //turnLeft(0.4, 250);
         }
         else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
-            stopDriving();
             robot.ballSensorServo.setPosition(0);
         }
+
+        stopDriving();
 
         //driveF(0.4, 700);
 
@@ -199,8 +199,9 @@ public class BlueAuto extends LinearOpMode {
     public void stopDriving() {
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
-        robot.driveWheel1.setPower(0.0);
-        robot.driveWheel2.setPower(0.0);
+        robot.driveWheel3.setPower(0.0);
+        robot.driveWheel4.setPower(0.0);
+        robot.driveWheelSide.setPower(0);
     }
 
 }

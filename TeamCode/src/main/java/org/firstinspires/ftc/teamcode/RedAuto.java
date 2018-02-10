@@ -79,13 +79,12 @@ public class RedAuto extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        //robot.liftMotor = hardwareMap.get(DcMotor.class, "liftMotor");
         robot.driveWheel1 = hardwareMap.get(DcMotor.class, "driveWheel1");
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
-        //robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
-        //robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
+        robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
+        robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
         robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
-        //robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
+        robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
         colorSensor = hardwareMap.get(ColorSensor.class, "colorSensor");
@@ -192,8 +191,9 @@ public class RedAuto extends LinearOpMode {
     public void stopDriving() {
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
-        robot.driveWheel1.setPower(0.0);
-        robot.driveWheel2.setPower(0.0);
+        robot.driveWheel3.setPower(0.0);
+        robot.driveWheel4.setPower(0.0);
+        robot.driveWheelSide.setPower(0);
     }
 
 }

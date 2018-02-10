@@ -128,22 +128,29 @@ public class BlueAutoOne extends LinearOpMode {
 
         if(colorSensor.blue() > 0){
             turnLeft(0.4, 300);
+            turnRight(0.4, 150);
             robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
-            turnRight(0.4, 300);
+            driveF(0.4, 400);
+            driveRight(0.4, 1350);
         }
         else if(colorSensor.red() > 0){
-            turnRight(0.4, 300);
+            //turnRight(0.4, 300);
+            driveF(1.0, 400);
+            //stopDriving();
             robot.ballSensorServo.setPosition(0);
-            stopDriving(1000);
-            turnLeft(0.4, 500);
+            //stopDriving();
+            driveF(0.4, 100);
+            driveRight(0.4, 2000);
+            //turnLeft(0.4, 250);
         }
         else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
-            stopDriving(1000);
             robot.ballSensorServo.setPosition(0);
+            driveF(0.4, 2700);
         }
 
-        driveF(0.4, 2000);
+        //TODO: This should be the correct one
+
+        stopDriving();
 
         //wait(2000);
 
@@ -200,12 +207,12 @@ public class BlueAutoOne extends LinearOpMode {
         Thread.sleep(time);
     }
 
-    public void stopDriving(int time) throws InterruptedException {
+    public void stopDriving() throws InterruptedException {
         robot.driveWheel1.setPower(0.0);
         robot.driveWheel2.setPower(0.0);
-        robot.driveWheel1.setPower(0.0);
-        robot.driveWheel2.setPower(0.0);
-        Thread.sleep(time);
+        robot.driveWheel3.setPower(0.0);
+        robot.driveWheel4.setPower(0.0);
+        robot.driveWheelSide.setPower(0);
     }
 
 }
