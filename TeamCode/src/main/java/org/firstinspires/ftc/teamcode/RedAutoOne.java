@@ -71,6 +71,7 @@ public class RedAutoOne extends LinearOpMode {
     static final double DRIVE_POWER = 1.0;
 
     ColorSensor colorSensor;
+    Servo ballSensorServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,7 +85,7 @@ public class RedAutoOne extends LinearOpMode {
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
         robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
         robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
-        robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
+        ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
         robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
@@ -101,7 +102,7 @@ public class RedAutoOne extends LinearOpMode {
 
         //robot.liftMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        robot.ballSensorServo.setPosition(0.75);
+//        ballSensorServo.setPosition(0.75);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Ready to run");    //
@@ -115,31 +116,43 @@ public class RedAutoOne extends LinearOpMode {
 
         colorSensor.enableLed(true); // Turn the light on for objects and turn it off if sensing color of lit up objects
 
+        ballSensorServo.setPosition(0.8);
+        sleep(2000);
         //TODO: This is the theoretical autonomous
 
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
-        if(colorSensor.red() > 0){
-            turnLeft(0.4, 300);
+        if(colorSensor.red() > colorSensor.blue()){
+            /*turnLeft(0.4, 300);
             turnRight(0.4, 150);
             robot.ballSensorServo.setPosition(0);
-            driveF(0.4, 400);
-            driveRight(0.4, 1350);
+            driveR(0.2, 2100);
+            //driveRight(0.4, 1350);*/
+            driveF(0.2, 1000);
+            ballSensorServo.setPosition(0);
+//            driveR(0.2, 500);
+            driveF(0.2, 2000);
         }
-        else if(colorSensor.blue() > 0){
+        else if(colorSensor.blue() > colorSensor.red()){
             //turnRight(0.4, 300);
-            driveF(1.0, 400);
-            //stopDriving();
-            robot.ballSensorServo.setPosition(0);
-            //stopDriving();
-            driveF(0.4, 100);
-            driveRight(0.4, 2000);
+//            driveR(1.0, 400);
+//            //stopDriving();
+//            robot.ballSensorServo.setPosition(0);
+//            //stopDriving();
+//            driveR(0.4, 100);
+//            driveRight(0.4, 2000);
             //turnLeft(0.4, 250);
+            driveR(0.2, 1000);
+            ballSensorServo.setPosition(0);
+            driveF(0.2, 500);
+            driveF(0.2, 3000);
         }
         else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
             robot.ballSensorServo.setPosition(0);
-            driveF(0.4, 2700);
+            driveR(0.4, 2700);
         }
+
+        //TODO: This should be the correct one
 
         stopDriving();
 

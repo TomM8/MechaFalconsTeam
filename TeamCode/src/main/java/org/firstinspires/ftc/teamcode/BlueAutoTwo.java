@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BlueAutoBackward", group="Autonomous")
+@Autonomous(name="BlueAutoForward", group="Autonomous")
 //@Disabled
 public class BlueAutoTwo extends LinearOpMode {
 
@@ -71,6 +71,7 @@ public class BlueAutoTwo extends LinearOpMode {
     static final double DRIVE_POWER = 1.0;
 
     ColorSensor colorSensor;
+    Servo ballSensorServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -85,7 +86,7 @@ public class BlueAutoTwo extends LinearOpMode {
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
         robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
         robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
-        robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
+        ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
         robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
@@ -100,7 +101,7 @@ public class BlueAutoTwo extends LinearOpMode {
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
 
-        robot.ballSensorServo.setPosition(0.75);
+        //robot.ballSensorServo.setPosition(0.60);
 
         robot.blockGrabber1.setPosition(0.72);
         robot.blockGrabber2.setPosition(0.29);
@@ -120,29 +121,41 @@ public class BlueAutoTwo extends LinearOpMode {
 
         //TODO: This is the theoretical autonomous
 
-        double position = robot.ballSensorServo.getPosition();
-        robot.ballSensorServo.setPosition(position);
+        //double position = robot.ballSensorServo.getPosition();
+        //robot.ballSensorServo.setPosition(position);
+
+        ballSensorServo.setPosition(0.8);
+        sleep(2000);
 
         //driveRight(0.3, 400);
+
 
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
         if(colorSensor.blue() > 0){
-            turnLeft(0.4, 300);
+            /*turnLeft(0.4, 300);
             turnRight(0.4, 150);
             robot.ballSensorServo.setPosition(0);
-            driveR(0.4, 400);
-            driveRight(0.4, 1350);
+            driveR(0.2, 2100);
+            //driveRight(0.4, 1350);*/
+            driveF(0.2, 500);
+            ballSensorServo.setPosition(0);
+            driveR(0.2, 500);
+            driveR(0.2, 10000);
         }
         else if(colorSensor.red() > 0){
             //turnRight(0.4, 300);
-            driveR(1.0, 400);
-            //stopDriving();
-            robot.ballSensorServo.setPosition(0);
-            //stopDriving();
-            driveR(0.4, 100);
-            driveRight(0.4, 2000);
+//            driveR(1.0, 400);
+//            //stopDriving();
+//            robot.ballSensorServo.setPosition(0);
+//            //stopDriving();
+//            driveR(0.4, 100);
+//            driveRight(0.4, 2000);
             //turnLeft(0.4, 250);
+            driveR(0.2, 500);
+            ballSensorServo.setPosition(0);
+            driveF(0.2, 500);
+            driveF(0.2, 10000);
         }
         else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
             robot.ballSensorServo.setPosition(0);

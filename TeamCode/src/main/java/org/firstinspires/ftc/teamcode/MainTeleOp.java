@@ -140,8 +140,7 @@ public class MainTeleOp extends OpMode {
 
         liftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
-        ballSensorServo.setPosition(0);
-
+        ballSensorServo.setPosition(0.1);
         blockGrabber1.setPosition(0.72);
         blockGrabber2.setPosition(0.29);
 
@@ -288,7 +287,7 @@ public class MainTeleOp extends OpMode {
             ballSensorServo.setPosition(0.8);
         }
         else {
-            ballSensorServo.setPosition(0);
+            ballSensorServo.setPosition(0.1);
         }
 
         //TODO: This might have been done, but we have to change the servo to be places horizontally

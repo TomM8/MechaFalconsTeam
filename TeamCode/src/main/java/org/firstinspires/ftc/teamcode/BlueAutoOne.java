@@ -57,7 +57,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="BlueAutoForward", group="Autonomous")
+@Autonomous(name="BlueAutoBackward", group="Autonomous")
 //@Disabled
 public class BlueAutoOne extends LinearOpMode {
 
@@ -71,6 +71,7 @@ public class BlueAutoOne extends LinearOpMode {
     static final double DRIVE_POWER = 1.0;
 
     ColorSensor colorSensor;
+    Servo ballSensorServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -84,7 +85,7 @@ public class BlueAutoOne extends LinearOpMode {
         robot.driveWheel2 = hardwareMap.get(DcMotor.class, "driveWheel2");
         robot.blockGrabber1 = hardwareMap.get(Servo.class, "blockGrabber1");
         robot.blockGrabber2 = hardwareMap.get(Servo.class, "blockGrabber2");
-        robot.ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
+        ballSensorServo = hardwareMap.get(Servo.class, "ballSensorServo");
         robot.driveWheelSide = hardwareMap.get(DcMotor.class, "driveWheelSide");
         robot.driveWheel3 = hardwareMap.get(DcMotor.class, "driveWheel3");
         robot.driveWheel4 = hardwareMap.get(DcMotor.class, "driveWheel4");
@@ -98,8 +99,6 @@ public class BlueAutoOne extends LinearOpMode {
 //        motorThree.setDirection(DcMotorSimple.Direction.REVERSE);
         robot.driveWheel1.setDirection(DcMotor.Direction.REVERSE);
         robot.driveWheel3.setDirection(DcMotor.Direction.REVERSE);
-
-        robot.ballSensorServo.setPosition(0.75);
 
         robot.blockGrabber1.setPosition(0.72);
         robot.blockGrabber2.setPosition(0.29);
@@ -117,36 +116,45 @@ public class BlueAutoOne extends LinearOpMode {
 
         colorSensor.enableLed(true); // Turn the light on for objects and turn it off if sensing color of lit up objects
 
+        ballSensorServo.setPosition(0.8);
+        sleep(2000);
+
         //TODO: This is the theoretical autonomous
 
-        double position = robot.ballSensorServo.getPosition();
-        robot.ballSensorServo.setPosition(position);
 
         //driveRight(0.3, 400);
 
         //robot.ballSensorServo.setPosition(0.10); //TODO: This has to be the position where the sensor is at the balls
 
-        if(colorSensor.blue() > 0){
-            turnLeft(0.4, 300);
+        if(colorSensor.red() > colorSensor.blue()){
+            /*turnLeft(0.4, 300);
             turnRight(0.4, 150);
             robot.ballSensorServo.setPosition(0);
-            driveF(0.4, 400);
-            driveRight(0.4, 1350);
+            driveR(0.2, 2100);
+            //driveRight(0.4, 1350);*/
+            driveR(0.2, 350);
+            ballSensorServo.setPosition(0);
+//            driveR(0.2, 500);
+            driveR(0.2, 2000);
         }
-        else if(colorSensor.red() > 0){
+        else if(colorSensor.blue() > colorSensor.red()){
             //turnRight(0.4, 300);
-            driveF(1.0, 400);
-            //stopDriving();
-            robot.ballSensorServo.setPosition(0);
-            //stopDriving();
-            driveF(0.4, 100);
-            driveRight(0.4, 2000);
+//            driveR(1.0, 400);
+//            //stopDriving();
+//            robot.ballSensorServo.setPosition(0);
+//            //stopDriving();
+//            driveR(0.4, 100);
+//            driveRight(0.4, 2000);
             //turnLeft(0.4, 250);
+            driveF(0.2, 350);
+            ballSensorServo.setPosition(0);
+//            driveR(0.2, 500);
+            driveR(0.2, 2000);
         }
-        else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
+        /*else if(colorSensor.blue() == 0 && colorSensor.red() == 0){
             robot.ballSensorServo.setPosition(0);
-            driveF(0.4, 2700);
-        }
+            driveR(0.4, 2700);
+        }*/
 
         //TODO: This should be the correct one
 
@@ -160,7 +168,7 @@ public class BlueAutoOne extends LinearOpMode {
         telemetry.addData("SensedRedNumber: ", colorSensor.red());
         telemetry.addData("SensedBlueNumber: ", colorSensor.blue());
 
-        robot.ballSensorServo.setPosition(0); //TODO: This will have to be changes to the home position
+        //TODO: This will have to be changes to the home position
 
     }
 
